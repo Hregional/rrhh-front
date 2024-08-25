@@ -1,0 +1,62 @@
+.btn-primary {
+    --bs-btn-bg: #007bff;
+    --bs-btn-border-color: #007bff;
+    --bs-btn-hover-bg: #0069d9;
+    --bs-btn-hover-border-color: #0062cc;
+    --bs-btn--active-bg: #005cbf;
+    --bs-btn--active-border-color: #0056b3;
+    --bs-btn-disabled-bg: #007bff;
+    --bs-btn-disabled-border-color: #007bff;
+}
+.card {
+    margin-bottom: 10px !important;
+}
+.main {
+    .content {
+    padding: 1.5rem 1.5rem 1.5rem;
+
+    @media (max-width: 767.98px) {
+    padding: 1rem 1rem 1rem;
+    }
+    }
+}
+.card {
+    border-radius: 1.5rem !important;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+    .card-header {
+    border-radius: 1.5rem !important;
+    }
+    .card-body {
+    border-radius: 1.5rem !important;
+    //box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+    @media (max-width: 767.98px) {
+    padding: 0.8rem;
+    }
+}
+.table-responsive,
+.accordion-item {
+    border-radius: 1.5rem !important;
+    }
+}
+input,
+button,
+a,
+.react-select__control {
+    border-radius: 60px !important;
+}
+// .sign-in-page {
+//     background-image: url('../img/photos/fondo.png');
+//     // background-size: contain; /* Cambiado de cover a contain */
+//     background-position: center;
+//     background-repeat: no-repeat;
+//     width: 100vw;
+//     height: 100vh;
+//     display: flex;
+//     justify-content: center;
+//     align-items: center;
+//     flex-direction: column;
+//     margin: 0;
+//     padding: 0;
+//     overflow: hidden;
+// }
+

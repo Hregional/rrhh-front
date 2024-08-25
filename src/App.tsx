@@ -25,8 +25,8 @@ const App = () => {
   return (
     <HelmetProvider>
       <Helmet
-        titleTemplate="%s | AppStack - React Admin & Dashboard Template"
-        defaultTitle="AppStack - React Admin & Dashboard Template"
+        titleTemplate="RRHH | %s"
+        defaultTitle="RRHH"
       />
       <Suspense fallback={<Loader />}>
         <Provider store={store}>

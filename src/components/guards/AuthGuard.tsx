@@ -14,7 +14,7 @@ function AuthGuard({ children }: AuthGuardType) {
   if (isInitialized && !isAuthenticated) {
     return <Navigate to="/auth/sign-in" />;
   }
-
+  //Agregar una condición para los roles
   return <React.Fragment>{children}</React.Fragment>;
 }
 

@@ -1,28 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-### AL ###
-#Template for AL projects for Dynamics 365 Business Central
-#launch.json folder
-.vscode/
-#Cache folder
-.alcache/
-#Symbols folder
-.alpackages/
-#Snapshots folder
-.snapshots/
-#Testing Output folder
-.output/
-#Extension App-file
-*.app
-#Rapid Application Development File
-rad.json
-#Translation Base-file
-*.g.xlf
-#License-file
-*.flf
-#Test results file
-TestResults.xml
-=======
 # Node modules
 node_modules/
 
@@ -43,28 +18,6 @@ yarn-error.log*
 
 # Editor directories and files
 .vscode/
-=======
-# Node modules
-node_modules/
-
-# Build output
-dist/
-build/
-
-# Logs
-logs/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Environment variables
-.env
-.env.development
-
-# Editor directories and files
-.vscode/
->>>>>>> edc19bc8b477433ef7025fe56dde6609c700dac8
 .idea/
 *.suo
 *.ntvs*
@@ -73,11 +26,7 @@ yarn-error.log*
 *.sw?
 
 # Dependency directories
-<<<<<<< HEAD
-jspm_packages/
-=======
 jspm_packages/rm -f .git/index.lock
->>>>>>> edc19bc8b477433ef7025fe56dde6609c700dac8
 
 # TypeScript
 *.tsbuildinfo
@@ -108,7 +57,3 @@ jspm_packages/rm -f .git/index.lock
 
 # Windows files
 Thumbs.db
-<<<<<<< HEAD
->>>>>>> b461104 (Initial Comit)
-=======
->>>>>>> edc19bc8b477433ef7025fe56dde6609c700dac8

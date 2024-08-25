@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Formik } from "formik";
@@ -12,29 +12,32 @@ import useAuth from "../../hooks/useAuth";
 function SignIn() {
   const navigate = useNavigate();
   const { signIn } = useAuth();
+  const [error, setError] = useState<string | null>(null);
 
   return (
     <Formik
       initialValues={{
-        email: "demo@bootlab.io",
-        password: "unsafepassword",
+        nombreUsuario: "",
+        password: "",
         submit: false,
       }}
       validationSchema={Yup.object().shape({
-        email: Yup.string()
-          .email("Must be a valid email")
-          .max(255)
-          .required("Email is required"),
-        password: Yup.string().max(255).required("Password is required"),
+        nombreUsuario: Yup.string()
+        // email: Yup.string()
+          // .email("Must be a valid email")
+          // .max(255)
+          .required("Usuario es requerido"),
+        password: Yup.string().required("Contraseña es requerida"),
       })}
-      onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+      onSubmit={async (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
         try {
-          await signIn(values.email, values.password);
+          await signIn(values.nombreUsuario, values.password);
 
-          navigate("/private");
+          // navigate("/private");
+          window.location.href = "/private";
         } catch (error: any) {
-          const message = error.message || "Something went wrong";
-
+          const message = error.response.data.message || "Algo salió mal";
+          console.log(error);
           setStatus({ success: false });
           setErrors({ submit: message });
           setSubmitting(false);
@@ -51,64 +54,49 @@ function SignIn() {
         values,
       }) => (
         <>
-          <div className="d-grid gap-2 mb-3">
-            <Link to="/dashboard/default" className="btn btn-google btn-lg">
-              <FontAwesomeIcon icon={faGoogle} /> Sign in with Google
-            </Link>
-            <Link to="/dashboard/default" className="btn btn-facebook btn-lg">
-              <FontAwesomeIcon icon={faFacebookF} /> Sign in with Facebook
-            </Link>
-          </div>
-          <div className="row">
-            <div className="col">
-              <hr />
-            </div>
-            <div className="col-auto text-uppercase d-flex align-items-center">
-              Or
-            </div>
-            <div className="col">
-              <hr />
-            </div>
-          </div>
-          <Form onSubmit={handleSubmit}>
-            <Alert className="my-3" variant="primary">
+<Form onSubmit={handleSubmit}>
+            {/* <Alert className="my-3" variant="primary">
               <div className="alert-message">
                 Use <strong>demo@bootlab.io</strong> and{" "}
                 <strong>unsafepassword</strong> to sign in
               </div>
-            </Alert>
+            </Alert> */}
             {errors.submit && (
               <Alert className="my-3" variant="danger">
                 <div className="alert-message">{errors.submit}</div>
               </Alert>
             )}
-
+            {/* Muestra errores específicos de la solicitud al backend */}
+            {error && (
+              <Alert className="my-3" variant="danger">
+                <div className="alert-message">{error}</div>
+              </Alert>
+            )}
             <Form.Group className="mb-3">
-              <Form.Label>Email</Form.Label>
+              <Form.Label>Usuario</Form.Label>
               <Form.Control
                 size="lg"
-                type="email"
-                name="email"
-                placeholder="Enter your email"
-                value={values.email}
-                isInvalid={Boolean(touched.email && errors.email)}
+                type="text"
+                name="nombreUsuario"
+                placeholder="Ingrese Usuario"
+                value={values.nombreUsuario}
+                isInvalid={Boolean(touched.nombreUsuario && errors.nombreUsuario)}
                 onBlur={handleBlur}
                 onChange={handleChange}
               />
-              {!!touched.email && (
+              {!!touched.nombreUsuario && (
                 <Form.Control.Feedback type="invalid">
-                  {errors.email}
+                  {errors.nombreUsuario}
                 </Form.Control.Feedback>
               )}
             </Form.Group>
-
             <Form.Group className="mb-3">
-              <Form.Label>Password</Form.Label>
+              <Form.Label>Contraseña</Form.Label>
               <Form.Control
                 size="lg"
                 type="password"
                 name="password"
-                placeholder="Enter your password"
+                placeholder="Ingrese Contraseña"
                 value={values.password}
                 isInvalid={Boolean(touched.password && errors.password)}
                 onBlur={handleBlur}
@@ -120,7 +108,7 @@ function SignIn() {
                 </Form.Control.Feedback>
               )}
               <small>
-                <Link to="/auth/reset-password">Forgot password?</Link>
+                <Link to="/auth/reset-password">¿Has olvidado tu contraseña?</Link>
               </small>
             </Form.Group>
 
@@ -128,7 +116,7 @@ function SignIn() {
               <Form.Check
                 type="checkbox"
                 id="rememberMe"
-                label="Remember me"
+                label="Recordarme la próxima vez"
                 defaultChecked
               />
             </div>
@@ -140,10 +128,29 @@ function SignIn() {
                 size="lg"
                 disabled={isSubmitting}
               >
-                Sign in
+                Iniciar Sesión
               </Button>
             </div>
           </Form>
+          <div className="row">
+            <div className="col">
+              <hr />
+            </div>
+            <div className="col-auto text-uppercase d-flex align-items-center">
+              O
+            </div>
+            <div className="col">
+              <hr />
+            </div>
+          </div>
+          <div className="d-grid gap-2 mb-3">
+            <Link to="/dashboard/default" className="btn btn-google btn-lg">
+              <FontAwesomeIcon icon={faGoogle} /> Iniciar con Google
+            </Link>
+            <Link to="/dashboard/default" className="btn btn-facebook btn-lg">
+              <FontAwesomeIcon icon={faFacebookF} /> Iniciar con Facebook
+            </Link>
+          </div>
         </>
       )}
     </Formik>

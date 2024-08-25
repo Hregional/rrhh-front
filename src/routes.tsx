@@ -115,11 +115,16 @@ const ProtectedPage = lazy(() => import("./pages/protected/ProtectedPage"));
 const routes = [
   {
     path: "/",
-    element: <LandingLayout />,
+    //element: <LandingLayout />,
+    element: (
+      <AuthGuard>
+        <DashboardLayout />
+      </AuthGuard>
+    ),  
     children: [
       {
         path: "",
-        element: <Landing />,
+        element: <ProtectedPage />,
       },
     ],
   },
