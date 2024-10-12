@@ -31,7 +31,7 @@ const Dashboard: React.FC<DashboardProps> = ({ children }) => (
         <Footer />
       </Main>
     </Wrapper>
-    <Settings />
+    {/* <Settings /> */}
   </React.Fragment>
 );
 

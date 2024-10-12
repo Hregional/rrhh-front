@@ -6,7 +6,7 @@ const Footer = () => (
     <Container fluid>
       <Row className="text-muted">
         <Col xs="6" className="text-start">
-          <ul className="list-inline">
+          {/* <ul className="list-inline">
             <li className="list-inline-item">
               <span className="text-muted">Support</span>
             </li>
@@ -19,12 +19,12 @@ const Footer = () => (
             <li className="list-inline-item">
               <span className="text-muted">Terms of Service</span>
             </li>
-          </ul>
+          </ul> */}
         </Col>
         <Col xs="6" className="text-end">
           <p className="mb-0">
             &copy; {new Date().getFullYear()} -{" "}
-            <span className="text-muted">AppStack</span>
+            <span className="text-muted">HRO</span>
           </p>
         </Col>
       </Row>

@@ -5,16 +5,27 @@ import useAuth from "../../hooks/useAuth";
 
 interface AuthGuardType {
   children: React.ReactNode;
+  requiredRoles?: string[] | undefined; // Modifica la definición de requiredRoles
 }
 
 // For routes that can only be accessed by authenticated users
-function AuthGuard({ children }: AuthGuardType) {
-  const { isAuthenticated, isInitialized } = useAuth();
+function AuthGuard({ children, requiredRoles  }: AuthGuardType) {
+  const { isAuthenticated, isInitialized, roles } = useAuth();
 
   if (isInitialized && !isAuthenticated) {
     return <Navigate to="/auth/sign-in" />;
   }
-  //Agregar una condición para los roles
+
+  if (
+    requiredRoles &&
+    Array.isArray(roles) &&
+    !roles.some((role) => requiredRoles.includes(role))
+  ) {
+    // Si el usuario no tiene ninguno de los roles requeridos, redirige a una página de acceso no autorizado
+    // return <Navigate to="/404" />;
+    return <Navigate to="/" />;
+  }
+
   return <React.Fragment>{children}</React.Fragment>;
 }
 

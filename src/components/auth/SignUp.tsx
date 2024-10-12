@@ -38,9 +38,7 @@ function SignUp() {
         try {
           signUp(
             values.email,
-            values.password,
-            values.firstName,
-            values.lastName
+            values.password
           );
           navigate("/auth/sign-in");
         } catch (error: any) {

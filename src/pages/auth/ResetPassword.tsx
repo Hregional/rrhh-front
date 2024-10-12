@@ -9,8 +9,8 @@ const ResetPasswordPage = () => (
   <React.Fragment>
     <Helmet title="Reset Password" />
     <div className="text-center mt-4">
-      <h1 className="h2">Reset password</h1>
-      <p className="lead">Enter your email to reset your password.</p>
+      <h1 className="h2">Restablecer contraseña</h1>
+      <p className="lead">Ingresa tu correo electrónico para restablecer tu contraseña.</p>
     </div>
 
     <Card>
@@ -20,8 +20,8 @@ const ResetPasswordPage = () => (
         </div>
       </Card.Body>
     </Card>
-    <div className="text-center mb-3">
-      Don't have an account? <Link to="/auth/sign-up">Sign up</Link>
+    <div className="text-center mb-3" style={{color: "white"}}>
+    Iniciar Sesion <Link to="/auth/sign-in"><span style={{color: "white", fontWeight: "normal"}}>Login</span></Link>
     </div>
   </React.Fragment>
 );

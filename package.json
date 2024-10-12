@@ -47,6 +47,7 @@
     "react-apexcharts": "1.4.0",
     "react-bootstrap": "2.7.4",
     "react-chartjs-2": "5.2.0",
+    "react-datepicker": "^7.4.0",
     "react-datetime": "3.2.0",
     "react-dom": "18.2.0",
     "react-dragula": "1.1.17",
@@ -62,6 +63,7 @@
     "react-select": "5.7.3",
     "react-syntax-highlighter": "15.5.0",
     "react-table": "7.8.0",
+    "react-window": "^1.8.10",
     "yup": "1.2.0"
   },
   "devDependencies": {
@@ -77,6 +79,7 @@
     "@types/react-redux": "7.1.25",
     "@types/react-syntax-highlighter": "15.5.7",
     "@types/react-table": "7.7.14",
+    "@types/react-window": "^1.8.8",
     "@types/yup": "0.29.14",
     "@vitejs/plugin-react": "3.1.0",
     "eslint-config-prettier": "8.8.0",

@@ -27,6 +27,9 @@ const initialState: AuthState = {
   isAuthenticated: false,
   isInitialized: false,
   user: null,
+  roles: [],
+  depa: [],
+  depaDefault: 0,
 };
 
 type AuthActionTypes = {
@@ -221,7 +224,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
           ...state.user,
         },
         signIn,
-        signUp,
+        signUp: (email: string, password: string) => signUp(email, password, "", ""),
         signOut,
         resetPassword,
       }}

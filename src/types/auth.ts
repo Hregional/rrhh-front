@@ -15,22 +15,25 @@ export type AuthState = {
   isAuthenticated: boolean;
   isInitialized: boolean;
   user: AuthUser;
+  roles: string[];
 };
 
 export type JWTContextType = {
   isAuthenticated: boolean;
   isInitialized: boolean;
   user: AuthUser;
+  roles: string[];
   method: "jwt";
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   signUp: (
-    email: string,
+    nombreUsuario: string,
     password: string,
-    firstName: string,
-    lastName: string
+    email: string,
+    idColaborador: number
   ) => Promise<void>;
   resetPassword: (email: string) => void;
+  newPassword: (resetToken: string, password: string) => void;
 };
 
 export type FirebaseAuthContextType = {
@@ -41,13 +44,10 @@ export type FirebaseAuthContextType = {
   signIn: (email: string, password: string) => Promise<any>;
   signUp: (
     email: string,
-    password: string,
-    firstName: string,
-    lastName: string
+    password: string,    
   ) => Promise<void>;
   signInWithGoogle: () => Promise<any>;
-  signInWithFaceBook: () => Promise<any>;
-  signInWithTwitter: () => Promise<any>;
+  signInWithMicrosoft: () => Promise<any>;
   signOut: () => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
 };
@@ -70,9 +70,7 @@ export type CognitoContextType = {
   signIn: (email: string, password: string) => Promise<unknown>;
   signUp: (
     email: string,
-    password: string,
-    firstName: string,
-    lastName: string
+    password: string
   ) => Promise<unknown>;
   signOut: VoidFunction;
   resetPassword: (email: string) => void;

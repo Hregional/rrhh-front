@@ -14,113 +14,141 @@ import {
   MapPin,
   Users,
   Share,
+  Airplay,
 } from "react-feather";
 
 const pagesSection = [
   {
     href: "/dashboard",
-    icon: Sliders,
+    icon: Airplay,
     title: "Dashboards",
-    badge: "5",
+    // badge: "5",
     children: [
       {
         href: "/dashboard/default",
         title: "Default",
       },
-      {
-        href: "/dashboard/analytics",
-        title: "Analytics",
-      },
-      {
-        href: "/dashboard/saas",
-        title: "SaaS",
-      },
-      {
-        href: "/dashboard/social",
-        title: "Social",
-      },
-      {
-        href: "/dashboard/crypto",
-        title: "Crypto",
-      },
     ],
   },
   {
-    href: "/pages",
-    icon: Layout,
-    title: "Pages",
-    children: [
-      {
-        href: "/pages/profile",
-        title: "Profile",
-      },
-      {
-        href: "/pages/settings",
-        title: "Settings",
-      },
-      {
-        href: "/pages/clients",
-        title: "Clients",
-      },
-      {
-        href: "/pages/projects",
-        title: "Projects",
-      },
-      {
-        href: "/pages/invoice",
-        title: "Invoice",
-      },
-      {
-        href: "/pages/pricing",
-        title: "Pricing",
-      },
-      {
-        href: "/pages/tasks",
-        title: "Tasks",
-      },
-      {
-        href: "/pages/chat",
-        title: "Chat",
-        badge: "New",
-      },
-      {
-        href: "/pages/blank",
-        title: "Blank Page",
-      },
-    ],
-  },
-  {
-    href: "/auth",
+    href: "/rrhh",
     icon: Users,
-    title: "Auth",
+    title: "RRHH",
+    // badge: "New",
     children: [
       {
-        href: "/auth/sign-in",
-        title: "Sign In",
+        href: "/rrhh/colaboradores",
+        title: "Colaboradores",
+        rol:"CrearColaboradores",
       },
       {
-        href: "/auth/sign-up",
-        title: "Sign Up",
+        href: "/rrhh/solicitudes",
+        title: "Solicitudes",
       },
       {
-        href: "/auth/reset-password",
-        title: "Reset Password",
+        href: "/rrhh/reportes",
+        title: "Reportes",
+      }
+      
+    ],
+  },  
+  {
+    href: "/ajustes",
+    icon: Sliders,
+    title: "Ajustes",
+    // badge: "New",
+    children: [
+      {
+        href: "/ajustes/user",
+        title: "Usuarios",
       },
       {
-        href: "/auth/404",
-        title: "404 Page",
+        href: "/ajustes/departamentos",
+        title: "Departamentos",
+        rol:"CrearDepartamentos",
       },
       {
-        href: "/auth/500",
-        title: "500 Page",
+        href: "/ajustes/roles",
+        title: "Roles",
       },
     ],
-  },
-  {
-    href: "/docs/introduction",
-    icon: BookOpen,
-    title: "Documentation",
-  },
+  }
+  // {
+  //   href: "/pages",
+  //   icon: Layout,
+  //   title: "Pages",
+  //   children: [
+  //     {
+  //       href: "/pages/profile",
+  //       title: "Profile",
+  //     },
+  //     {
+  //       href: "/pages/settings",
+  //       title: "Settings",
+  //     },
+  //     {
+  //       href: "/pages/clients",
+  //       title: "Clients",
+  //     },
+  //     {
+  //       href: "/pages/projects",
+  //       title: "Projects",
+  //     },
+  //     {
+  //       href: "/pages/invoice",
+  //       title: "Invoice",
+  //     },
+  //     {
+  //       href: "/pages/pricing",
+  //       title: "Pricing",
+  //     },
+  //     {
+  //       href: "/pages/tasks",
+  //       title: "Tasks",
+  //     },
+  //     {
+  //       href: "/pages/chat",
+  //       title: "Chat",
+  //       badge: "New",
+  //     },
+  //     {
+  //       href: "/pages/blank",
+  //       title: "Blank Page",
+  //     },
+  //   ],
+  // },
+  // {
+  //   href: "/auth",
+  //   icon: Users,
+  //   title: "Auth",
+  //   children: [
+  //     {
+  //       href: "/auth/sign-in",
+  //       title: "Sign In",
+  //     },
+  //     {
+  //       href: "/auth/sign-up",
+  //       title: "Sign Up",
+  //     },
+  //     {
+  //       href: "/auth/reset-password",
+  //       title: "Reset Password",
+  //     },
+  //     {
+  //       href: "/auth/404",
+  //       title: "404 Page",
+  //     },
+  //     {
+  //       href: "/auth/500",
+  //       title: "500 Page",
+  //     },
+  //   ],
+  // },
+  // {
+  //   href: "/docs/introduction",
+  //   icon: BookOpen,
+  //   title: "Documentation",
+  // },
 ] as SidebarItemsType[];
 
 const componentsSection = [
@@ -360,17 +388,17 @@ const pluginsSection = [
 
 const navItems = [
   {
-    title: "Pages",
+    title: "Modulos",
     pages: pagesSection,
   },
-  {
-    title: "Tools & Components",
-    pages: componentsSection,
-  },
-  {
-    title: "Plugins & Addons",
-    pages: pluginsSection,
-  },
+  // {
+  //   title: "Tools & Components",
+  //   pages: componentsSection,
+  // },
+  // {
+  //   title: "Plugins & Addons",
+  //   pages: pluginsSection,
+  // },
 ];
 
 export default navItems;

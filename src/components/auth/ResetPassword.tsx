@@ -18,9 +18,9 @@ function ResetPassword() {
       }}
       validationSchema={Yup.object().shape({
         email: Yup.string()
-          .email("Must be a valid email")
+          .email("Debe ser un correo electrónico válido")
           .max(255)
-          .required("Email is required"),
+          .required("Se requiere correo electrónico"),
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
         try {
@@ -51,12 +51,12 @@ function ResetPassword() {
             </Alert>
           )}
           <Form.Group className="mb-3">
-            <Form.Label>Email</Form.Label>
+            <Form.Label>Correo</Form.Label>
             <Form.Control
               size="lg"
               type="email"
               name="email"
-              placeholder="Enter your email"
+              placeholder="Digite su correo"
               value={values.email}
               isInvalid={Boolean(touched.email && errors.email)}
               onBlur={handleBlur}
@@ -75,7 +75,7 @@ function ResetPassword() {
               size="lg"
               disabled={isSubmitting}
             >
-              Reset password
+              Restablecer contraseña
             </Button>
           </div>
         </Form>

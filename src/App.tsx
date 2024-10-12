@@ -24,10 +24,7 @@ const App = () => {
 
   return (
     <HelmetProvider>
-      <Helmet
-        titleTemplate="RRHH | %s"
-        defaultTitle="RRHH"
-      />
+      <Helmet titleTemplate="HRO" defaultTitle="HRO" />
       <Suspense fallback={<Loader />}>
         <Provider store={store}>
           <ThemeProvider>

@@ -9,7 +9,7 @@ const useAuth = () => {
   const context = useContext(AuthContext);
 
   if (!context)
-    throw new Error("AuthContext must be placed within AuthProvider");
+    throw new Error("AuthContext debe colocarse dentro de AuthProvider");
 
   return context;
 };

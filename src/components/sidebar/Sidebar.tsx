@@ -25,8 +25,9 @@ const Sidebar = ({ items, showFooter = true }: SidebarProps) => {
     <nav className={`sidebar ${!isOpen ? "collapsed" : ""}`}>
       <div className="sidebar-content">
         <PerfectScrollbar>
-          <a className="sidebar-brand" href="/">
-            <Logo /> <span className="align-middle me-3">AppStack</span>
+          <a className="sidebar-brand" href="/private">
+            {/* <Logo /> */}
+            <span className="align-middle me-3">HRO</span>
           </a>
 
           <SidebarNav items={items} />

@@ -10,6 +10,19 @@ import LandingLayout from "./layouts/Landing";
 // Guards
 import AuthGuard from "./components/guards/AuthGuard";
 
+//RRHH
+import RrhhProvider from "./contexts/RrhhProvider";
+import AjustesProvider from "./contexts/AjustesProvider";
+
+//Ajustes 
+const User = lazy(() => import("./pages/ajustes/User"));
+const Departamento = lazy(() => import("./pages/ajustes/Departamento"));
+const Roles = lazy(() => import("./pages/ajustes/Roles"));
+
+//PAGES RRHH
+const Colaboradores = lazy(() => import("./pages/rrhh/Colaboradores"));
+const Solicitudes = lazy(() => import("./pages/rrhh/Solicitudes"));
+const Reportes = lazy(() => import("./pages/rrhh/Reportes"));
 // Landing
 const Landing = lazy(() => import("./pages/landing/Landing"));
 
@@ -35,8 +48,10 @@ const Blank = lazy(() => import("./pages/pages/Blank"));
 const Page500 = lazy(() => import("./pages/auth/Page500"));
 const Page404 = lazy(() => import("./pages/auth/Page404"));
 const SignIn = lazy(() => import("./pages/auth/SignIn"));
-const SignUp = lazy(() => import("./pages/auth/SignUp"));
+// const SignUp = lazy(() => import("./pages/auth/SignUp"));
 const ResetPassword = lazy(() => import("./pages/auth/ResetPassword"));
+const NewPassword = lazy(() => import("./pages/auth/NewPassword"));
+
 
 // UI components
 const Alerts = lazy(() => import("./pages/ui/Alerts"));
@@ -129,8 +144,62 @@ const routes = [
     ],
   },
   {
+    path: "rrhh",
+    element: (
+      <AjustesProvider> 
+        <RrhhProvider>
+            <DashboardLayout />
+        </RrhhProvider>
+      </AjustesProvider>
+    ),
+    children: [
+      {
+        path: "colaboradores",
+        element: <Colaboradores />,
+      },
+      {
+        path: "solicitudes",
+        element: <Solicitudes />,
+      },
+      {
+        path: "reportes",
+        element: <Reportes />,
+      }
+    ],
+  },
+  {
+    path: "ajustes",
+    element: (
+      <AuthGuard>
+        <AjustesProvider>
+          <RrhhProvider>
+            <DashboardLayout />
+          </RrhhProvider>
+        </AjustesProvider>
+      </AuthGuard>
+    ),
+    children: [
+      {
+        path: "user",
+        element: <User />,
+      },
+      {
+        path: "departamentos",
+        element: <Departamento />,
+      },
+      {
+        path: "roles",
+        element: <Roles />,
+      },
+    ],
+  },
+  {
     path: "dashboard",
-    element: <DashboardLayout />,
+    element: (
+      <AuthGuard>
+        <DashboardLayout />
+      </AuthGuard>
+    ), 
     children: [
       {
         path: "default",
@@ -205,12 +274,12 @@ const routes = [
         element: <SignIn />,
       },
       {
-        path: "sign-up",
-        element: <SignUp />,
-      },
-      {
         path: "reset-password",
         element: <ResetPassword />,
+      },
+      {
+        path: "new-password/:token",
+        element: <NewPassword />,
       },
       {
         path: "404",

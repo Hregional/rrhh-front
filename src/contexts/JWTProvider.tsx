@@ -2,10 +2,12 @@ import { useEffect, useReducer, ReactNode } from "react";
 
 import { ActionMap, AuthState, AuthUser } from "../types/auth";
 
-import axios from "../utils/axios";
+import axios from "axios";
 import { isValidToken, setSession } from "../utils/jwt";
 
 import AuthContext from "./JWTContext";
+
+import { apiURL } from "../utils/endpoints";
 
 const INITIALIZE = "INITIALIZE";
 const SIGN_IN = "SIGN_IN";
@@ -16,9 +18,11 @@ type AuthActionTypes = {
   [INITIALIZE]: {
     isAuthenticated: boolean;
     user: AuthUser;
+    roles: string[];
   };
   [SIGN_IN]: {
     user: AuthUser;
+    roles: string[];
   };
   [SIGN_OUT]: undefined;
   [SIGN_UP]: {
@@ -30,6 +34,7 @@ const initialState = {
   isAuthenticated: false,
   isInitialized: false,
   user: null,
+  roles: [],
 };
 
 const JWTReducer = (
@@ -42,18 +47,21 @@ const JWTReducer = (
         isAuthenticated: action.payload.isAuthenticated,
         isInitialized: true,
         user: action.payload.user,
+        roles: action.payload.roles
       };
     case SIGN_IN:
       return {
         ...state,
         isAuthenticated: true,
         user: action.payload.user,
+        roles: action.payload.roles
       };
     case SIGN_OUT:
       return {
         ...state,
         isAuthenticated: false,
         user: null,
+        roles: []
       };
 
     case SIGN_UP:
@@ -78,15 +86,16 @@ function AuthProvider({ children }: { children: ReactNode }) {
 
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
-
-          const response = await axios.get("/api/auth/my-account");
+          const  { roles }  = setSession(accessToken);
+          console.log(roles);
+          const response = await axios.get(`${apiURL}/auth/my-account`);
           const { user } = response.data;
-
           dispatch({
             type: INITIALIZE,
             payload: {
               isAuthenticated: true,
               user,
+              roles,
             },
           });
         } else {
@@ -95,6 +104,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
             payload: {
               isAuthenticated: false,
               user: null,
+              roles: [],
             },
           });
         }
@@ -105,6 +115,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
           payload: {
             isAuthenticated: false,
             user: null,
+            roles: [],
           },
         });
       }
@@ -114,19 +125,28 @@ function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signIn = async (email: string, password: string) => {
-    const response = await axios.post("/api/auth/sign-in", {
-      email,
-      password,
-    });
-    const { accessToken, user } = response.data;
-
-    setSession(accessToken);
-    dispatch({
-      type: SIGN_IN,
-      payload: {
-        user,
-      },
-    });
+    try{
+      const response = await axios.post(`${apiURL}/Login/authenticate`, {
+        email,
+        password,
+      });
+      const { accessToken, user } = response.data;
+      const { roles } = setSession(accessToken);
+      console.log(roles);
+      // const { roles, depa, depaDefault } = setSession(accessToken); // Aquí obtenemos los roles
+  
+      setSession(accessToken);
+      dispatch({
+        type: SIGN_IN,
+        payload: {
+          user,
+          roles,
+        },
+      });
+    } catch (error: any) {
+      console.error(`Error en la solicitud de inicio de sesión: ${error.message}`);
+      throw error;
+    }
   };
 
   const signOut = async () => {
@@ -137,14 +157,14 @@ function AuthProvider({ children }: { children: ReactNode }) {
   const signUp = async (
     email: string,
     password: string,
-    firstName: string,
-    lastName: string
+    nombreUsuario: string,
+    idColaborador: number
   ) => {
-    const response = await axios.post("/api/auth/sign-up", {
+    const response = await axios.post(`${apiURL}/UserUser/crear`, {
       email,
       password,
-      firstName,
-      lastName,
+      nombreUsuario,
+      idColaborador,
     });
     const { accessToken, user } = response.data;
 
@@ -157,8 +177,47 @@ function AuthProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  const resetPassword = (email: string) => console.log(email);
+  const resetPassword = async (email: string): Promise<void> => {
+    // Realiza la solicitud a la API con el endpoint reset-password
+    const response = await axios.post(`${apiURL}/Email/reset-password`, {
+      email: email,
+    });
+    // Verifica la respuesta de la API
+    if (response.status === 200) {
+      console.log(
+        "Solicitud de restablecimiento de contraseña enviada correctamente."
+      );
+    } else {
+      console.error(
+        "Error al enviar la solicitud de restablecimiento de contraseña."
+      );
+    }
+    return response.data;
+  };
+  const newPassword = async (
+    token: string,
+    newPassword: string
+  ): Promise<void> => {
+    try {
+      const response = await axios.post(`${apiURL}/Password/reset`, {
+        resetToken: token,
+        newPassword: newPassword,
+      });
 
+      // Verifica la respuesta de la API
+      if (response.status === 200) {
+        console.log("Restablecimiento de contraseña exitoso.");
+      } else {
+        console.error("Error, no se pudo cambiar la contraseña");
+      }
+    } catch (error: any) {
+      console.error(
+        `Error en la solicitud de restablecimiento de contraseña: ${error.message}`
+      );
+      // Puedes lanzar el error nuevamente si necesitas manejarlo en el lugar donde llamas a esta función
+      throw error;
+    }
+  };
   return (
     <AuthContext.Provider
       value={{
@@ -168,11 +227,13 @@ function AuthProvider({ children }: { children: ReactNode }) {
         signOut,
         signUp,
         resetPassword,
+        newPassword,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 }
+
 
 export default AuthProvider;

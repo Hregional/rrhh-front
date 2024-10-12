@@ -1,40 +1,39 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import  { useState } from "react";
+import { Link } from "react-router-dom";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { Alert, Button, Form } from "react-bootstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { faMicrosoft } from '@fortawesome/free-brands-svg-icons'; // Asegúrate de importar el icono de Microsoft
 
 import useAuth from "../../hooks/useAuth";
 
 function SignIn() {
-  const navigate = useNavigate();
   const { signIn } = useAuth();
   const [error, setError] = useState<string | null>(null);
 
   return (
     <Formik
       initialValues={{
-        nombreUsuario: "",
+        email: "",
         password: "",
         submit: false,
       }}
       validationSchema={Yup.object().shape({
-        nombreUsuario: Yup.string()
-        // email: Yup.string()
-          // .email("Must be a valid email")
-          // .max(255)
+        // nombreUsuario: Yup.string()
+        email: Yup.string()
+          .email("Must be a valid email")
+          .max(255)
           .required("Usuario es requerido"),
         password: Yup.string().required("Contraseña es requerida"),
       })}
       onSubmit={async (values, { setErrors, setStatus, setSubmitting, resetForm }) => {
         try {
-          await signIn(values.nombreUsuario, values.password);
-
+          await signIn(values.email, values.password);
           // navigate("/private");
-          window.location.href = "/private";
+          window.location.href = "/private/";
         } catch (error: any) {
           const message = error.response.data.message || "Algo salió mal";
           console.log(error);
@@ -55,12 +54,6 @@ function SignIn() {
       }) => (
         <>
 <Form onSubmit={handleSubmit}>
-            {/* <Alert className="my-3" variant="primary">
-              <div className="alert-message">
-                Use <strong>demo@bootlab.io</strong> and{" "}
-                <strong>unsafepassword</strong> to sign in
-              </div>
-            </Alert> */}
             {errors.submit && (
               <Alert className="my-3" variant="danger">
                 <div className="alert-message">{errors.submit}</div>
@@ -73,20 +66,19 @@ function SignIn() {
               </Alert>
             )}
             <Form.Group className="mb-3">
-              <Form.Label>Usuario</Form.Label>
+              <Form.Label>Correo</Form.Label>
               <Form.Control
-                size="lg"
-                type="text"
-                name="nombreUsuario"
-                placeholder="Ingrese Usuario"
-                value={values.nombreUsuario}
-                isInvalid={Boolean(touched.nombreUsuario && errors.nombreUsuario)}
+                type="email"
+                name="email"
+                placeholder="Correo Electrónico"
+                value={values.email}
+                isInvalid={Boolean(touched.email && errors.email)}
                 onBlur={handleBlur}
                 onChange={handleChange}
               />
-              {!!touched.nombreUsuario && (
+              {!!touched.email && (
                 <Form.Control.Feedback type="invalid">
-                  {errors.nombreUsuario}
+                  {errors.email}
                 </Form.Control.Feedback>
               )}
             </Form.Group>
@@ -147,8 +139,8 @@ function SignIn() {
             <Link to="/dashboard/default" className="btn btn-google btn-lg">
               <FontAwesomeIcon icon={faGoogle} /> Iniciar con Google
             </Link>
-            <Link to="/dashboard/default" className="btn btn-facebook btn-lg">
-              <FontAwesomeIcon icon={faFacebookF} /> Iniciar con Facebook
+            <Link to="/dashboard/default" className="btn btn-microsoft btn-lg">
+              <FontAwesomeIcon icon={faMicrosoft} /> Iniciar con Microsoft
             </Link>
           </div>
         </>

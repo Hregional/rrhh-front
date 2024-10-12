@@ -86,6 +86,7 @@ const NavbarComponent = () => {
     <Navbar variant="light" expand className="navbar-bg">
       <span
         className="sidebar-toggle d-flex"
+        
         onClick={() => {
           setIsOpen(!isOpen);
         }}
@@ -93,7 +94,7 @@ const NavbarComponent = () => {
         <i className="hamburger align-self-center" />
       </span>
 
-      <Form className="d-none d-sm-inline-block">
+      {/* <Form className="d-none d-sm-inline-block">
         <InputGroup className="input-group-navbar">
           <Form.Control
             placeholder={t("Search") as string}
@@ -103,11 +104,11 @@ const NavbarComponent = () => {
             <Search className="feather" />
           </Button>
         </InputGroup>
-      </Form>
+      </Form> */}
 
       <Navbar.Collapse>
         <Nav className="navbar-align">
-          <NavbarDropdown
+          {/* <NavbarDropdown
             header="New Messages"
             footer="Show all messages"
             icon={MessageCircle}
@@ -132,9 +133,9 @@ const NavbarComponent = () => {
                 />
               );
             })}
-          </NavbarDropdown>
+          </NavbarDropdown> */}
 
-          <NavbarDropdown
+          {/* <NavbarDropdown
             header="New Notifications"
             footer="Show all notifications"
             icon={BellOff}
@@ -167,7 +168,7 @@ const NavbarComponent = () => {
             })}
           </NavbarDropdown>
 
-          <NavbarLanguages />
+          <NavbarLanguages /> */}
           <NavbarUser />
         </Nav>
       </Navbar.Collapse>
