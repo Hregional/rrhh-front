@@ -6,6 +6,8 @@ import { Alert, Button, Form } from "react-bootstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons";
+import { GoogleLogin } from '@react-oauth/google';
+
 
 import useAuth from "../../hooks/useAuth";
 

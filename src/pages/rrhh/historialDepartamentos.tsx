@@ -2,17 +2,17 @@ import React from "react";
 import AuthGuard from "../../components/guards/AuthGuard"
 import { Helmet } from "react-helmet-async";
 import { Card } from "react-bootstrap";
-import CrearRoles from "../../components/ajustes/roles/CrearRoles";
+import HistorialDepartamento from "../../components/rrhh/report/historialDepartamento";
 
-const Roles = () => {
+const HistorialDepartamentos = () => {
     return(
-        <AuthGuard requiredRoles={["CrearRoles"]}>
+        <AuthGuard requiredRoles={["HistorialDepartamento"]}>
             <React.Fragment>
-                <Helmet title="Roles" />
+                <Helmet title="Historial de Departamentos" />
                 <Card>
                     <Card.Body>
                         <div className="m-sm-3">
-                            <CrearRoles /> 
+                            <HistorialDepartamento />
                         </div>
                     </Card.Body>
                 </Card>
@@ -20,4 +20,4 @@ const Roles = () => {
         </AuthGuard>
     )
 };
-export default Roles;
+export default HistorialDepartamentos;

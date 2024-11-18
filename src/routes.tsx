@@ -16,13 +16,16 @@ import AjustesProvider from "./contexts/AjustesProvider";
 
 //Ajustes 
 const User = lazy(() => import("./pages/ajustes/User"));
-const Departamento = lazy(() => import("./pages/ajustes/Departamento"));
+const Departamento = lazy(() => import("./pages/rrhh/Departamento"));
 const Roles = lazy(() => import("./pages/ajustes/Roles"));
+const RolesPermisos = lazy(() => import("./pages/ajustes/RolesPermisos"));
+const UserRol = lazy(() => import("./pages/ajustes/RolUser"));
 
 //PAGES RRHH
 const Colaboradores = lazy(() => import("./pages/rrhh/Colaboradores"));
 const Solicitudes = lazy(() => import("./pages/rrhh/Solicitudes"));
-const Reportes = lazy(() => import("./pages/rrhh/Reportes"));
+const HistorialDepartamentos = lazy(() => import("./pages/rrhh/historialDepartamentos"));
+const HistorialLicencias = lazy(() => import("./pages/rrhh/HistorialLicencias"));
 // Landing
 const Landing = lazy(() => import("./pages/landing/Landing"));
 
@@ -158,12 +161,20 @@ const routes = [
         element: <Colaboradores />,
       },
       {
+        path: "departamentos",
+        element: <Departamento />,
+      },
+      {
         path: "solicitudes",
         element: <Solicitudes />,
       },
       {
-        path: "reportes",
-        element: <Reportes />,
+        path: "reportes/historialDepartamentos",
+        element: <HistorialDepartamentos />,
+      },
+      {
+        path: "reportes/historialLicencias",
+        element: <HistorialLicencias />,
       }
     ],
   },
@@ -184,12 +195,16 @@ const routes = [
         element: <User />,
       },
       {
-        path: "departamentos",
-        element: <Departamento />,
-      },
-      {
         path: "roles",
         element: <Roles />,
+      },
+      {
+        path: "asignarPermisosRoles",
+        element: <RolesPermisos />,
+      },
+      {
+        path: "asignarRolUsuario",
+        element: <UserRol />,
       },
     ],
   },

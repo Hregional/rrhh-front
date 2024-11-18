@@ -87,7 +87,6 @@ function AuthProvider({ children }: { children: ReactNode }) {
         if (accessToken && isValidToken(accessToken)) {
           setSession(accessToken);
           const  { roles }  = setSession(accessToken);
-          console.log(roles);
           const response = await axios.get(`${apiURL}/auth/my-account`);
           const { user } = response.data;
           dispatch({
@@ -132,7 +131,6 @@ function AuthProvider({ children }: { children: ReactNode }) {
       });
       const { accessToken, user } = response.data;
       const { roles } = setSession(accessToken);
-      console.log(roles);
       // const { roles, depa, depaDefault } = setSession(accessToken); // Aquí obtenemos los roles
   
       setSession(accessToken);
@@ -218,6 +216,29 @@ function AuthProvider({ children }: { children: ReactNode }) {
       throw error;
     }
   };
+  const singGoogle = async (token: string) => {
+    try{
+      const response = await axios.post(`${apiURL}/Login/google`, {
+        token,
+        
+      });
+      const { accessToken, user } = response.data;
+      const { roles } = setSession(accessToken);
+      // const { roles, depa, depaDefault } = setSession(accessToken); // Aquí obtenemos los roles
+  
+      setSession(accessToken);
+      dispatch({
+        type: SIGN_IN,
+        payload: {
+          user,
+          roles,
+        },
+      });
+    } catch (error: any) {
+      console.error(`Error en la solicitud de inicio de sesión: ${error.message}`);
+      throw error;
+    }
+  };
   return (
     <AuthContext.Provider
       value={{
@@ -228,6 +249,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
         signUp,
         resetPassword,
         newPassword,
+        singGoogle
       }}
     >
       {children}

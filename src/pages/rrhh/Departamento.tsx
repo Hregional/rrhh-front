@@ -2,7 +2,7 @@ import React from "react";
 import AuthGuard from "../../components/guards/AuthGuard"
 import { Helmet } from "react-helmet-async";
 import { Card } from "react-bootstrap";
-import CrearDepartamento from "../../components/ajustes/CrearDepartamento";
+import CrearDepartamento from "../../components/rrhh/departamento/CrearDepartamento";
 
 const Departamento = () => {
     return(

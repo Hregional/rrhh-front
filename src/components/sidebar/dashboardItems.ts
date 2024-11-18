@@ -42,12 +42,30 @@ const pagesSection = [
         rol:"CrearColaboradores",
       },
       {
+        href: "/rrhh/departamentos",
+        title: "Departamentos",
+        rol:"CrearDepartamentos",
+      },
+      {
         href: "/rrhh/solicitudes",
         title: "Solicitudes",
+        rol:"CrearSolicitudes",
       },
       {
         href: "/rrhh/reportes",
         title: "Reportes",
+        children:[
+          {
+            href: "/rrhh/reportes/historialDepartamentos",
+            title: "Historial Departamentos",
+            rol:"HistorialDepartamento",
+          },
+          {
+            href: "/rrhh/reportes/historialLicencias",
+            title: "Historial Licencias",
+            rol:"HistorialLicencias",
+          }
+        ]
       }
       
     ],
@@ -61,15 +79,25 @@ const pagesSection = [
       {
         href: "/ajustes/user",
         title: "Usuarios",
+        rol:"CrearUsuarios",
       },
-      {
-        href: "/ajustes/departamentos",
-        title: "Departamentos",
-        rol:"CrearDepartamentos",
-      },
+
       {
         href: "/ajustes/roles",
         title: "Roles",
+        rol:"CrearRoles",
+      },
+
+      {
+        href: "/ajustes/asignarPermisosRoles",
+        title: "Asingar Permisos Roles",
+        rol:"AsignarPermisosRol",
+      },
+
+      {
+        href: "/ajustes/asignarRolUsuario",
+        title: "Asingar Roles Usuario",
+        rol:"AsignarRolUsuario",
       },
     ],
   }

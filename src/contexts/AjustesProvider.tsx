@@ -4,11 +4,13 @@ import { apiURL } from "../utils/endpoints";
 
 
 function AjustesProvider({ children } : { children: React.ReactNode }) {
-    const crearDepartamento = async (nombreModulo: string, descripcionModulo: string) => {
+
+    const crearDepartamento = async (nuevoDepartamento: string, descripcionDepartamento: string) => {
         try {
+            console.log(nuevoDepartamento, descripcionDepartamento)
             await axios.post(`${apiURL}/departamento/crear`, {
-                nombreModulo,
-                descripcionModulo,
+                nuevoDepartamento,
+                descripcionDepartamento,
             });
             } catch (error: any) {
             throw error;
@@ -26,15 +28,15 @@ function AjustesProvider({ children } : { children: React.ReactNode }) {
             } catch (error) {}
         }
     const updateDepartamento = async (
-        idModulos: number, 
-        nombreModulo: string, 
-        descripcionModulo: string) => {
+        idDepartamento: number, 
+        nombreDepartamento: string, 
+        descripcionDepartamento: string) => {
             try {
                 const response = await axios.put(
-                `${apiURL}/departamento/actualizar/${idModulos}`,
+                `${apiURL}/departamento/actualizar/${idDepartamento}`,
                 {
-                nombreModulo,
-                descripcionModulo,
+                    nombreDepartamento,
+                    descripcionDepartamento,
                 }
             );
             if (response.status === 200) {
@@ -69,6 +71,18 @@ function AjustesProvider({ children } : { children: React.ReactNode }) {
             return response.data.$values;
             } catch (error) {}
         }
+
+    const listarRolesSinPermisos = async () => {
+        try {
+            const response = await axios.get(`${apiURL}/rol/listarSinPermisos`);
+            if (response.status === 200) {
+            } else {
+                console.log("Error, no se logro cargar los roles");
+            }
+            return response.data.$values;
+            } catch (error) {}
+        }
+
     const updateRol = async (
         idRol: number, 
         nombreRol: string, 
@@ -95,7 +109,81 @@ function AjustesProvider({ children } : { children: React.ReactNode }) {
             }
         }
 
-    
+    const listarPermisos = async () => {
+        try {
+            const response = await axios.get(`${apiURL}/permisos/listar`);
+            if (response.status === 200) {
+            } else {
+                console.log("Error, no se logro cargar los permisos");
+            }
+            return response.data.$values;
+            } catch (error) {}
+        }
+    const insertarRolesPermisos = async (idRol: number, idPermiso: number) => {
+        try {
+            await axios.post(`${apiURL}/permisos/rol/crear`, {
+                idRol,
+                idPermiso,
+            });
+            } catch (error: any) {
+            throw error;
+            }
+        }
+    const listarRolPermisos = async () => {
+        try {
+            const response = await axios.get(`${apiURL}/permisos/rol/listar`);
+            if (response.status === 200) {
+            } else {
+                console.log("Error, no se logro cargar los roles permisos");
+            }
+            return response.data.$values;
+            } catch (error) {}
+        }
+    const updateRolPermisos = async (idRol: number, nuevosPermisos: number[]) => {
+        try {
+            const response = await axios.put(`${apiURL}/permisos/rol/actualizar/${idRol}`, 
+                nuevosPermisos,
+            );
+            if (response.status === 200) {
+                //console.log("Departamento y permisos actualizados exitosamente.");
+              } else {
+                console.log("Error, no se logro actualizar el Departamento y permisos");
+              }
+            } catch (error: any) {
+              console.error(
+                `Error en la solicitud  actualizar Departamento y permisos: ${error.message}`
+              );
+              throw error;
+            }
+        }
+
+    const listarUserSinRoles = async () => {
+        try {
+            const response = await axios.get(`${apiURL}/UserUser/listarUsuariosSinRoles`);
+            if (response.status === 200) {
+            } else {
+                console.log("Error, no se logro cargar los roles");
+            }
+            return response.data.$values;
+            } catch (error) {}
+    }
+    const asignarRol = async (idUsuario: number, idRol: number) => {
+        try {
+            const response = await axios.post(`${apiURL}/UserUser/asingarRolUsuario`, {
+            idUsuario,
+            idRol,
+            });
+            if (response.status === 200) {
+            //console.log("Rol asignado correctamente.");
+            } else {
+            console.log("Error, no se logro asignar el Rol");
+            }
+        } catch (error: any) {
+            console.log(idRol, idUsuario);
+            console.error(`Error en la solicitud asignar Rol: ${error.message}`);
+            throw error;
+        }
+        };
 
 return (
 <AjustesContext.Provider value={{ 
@@ -104,7 +192,14 @@ return (
     updateDepartamento,
     crearRol,
     listarRoles,
+    listarRolesSinPermisos,
     updateRol,
+    listarPermisos,
+    insertarRolesPermisos,
+    listarRolPermisos,
+    updateRolPermisos,
+    listarUserSinRoles,
+    asignarRol,
     }}>
     {children}
 </AjustesContext.Provider>

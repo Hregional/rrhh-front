@@ -18,6 +18,10 @@ import AuthProvider from "./contexts/JWTProvider";
 // import AuthProvider from "./contexts/FirebaseAuthProvider";
 // import AuthProvider from "./contexts/Auth0Provider";
 // import AuthProvider from "./contexts/CognitoProvider";
+import { MsalProvider } from "@azure/msal-react";
+import { PublicClientApplication } from "@azure/msal-browser";
+import { msalConfig } from "./utils/msalConfig";
+const msalInstance = new PublicClientApplication(msalConfig);
 
 const App = () => {
   const content = useRoutes(routes);
@@ -31,7 +35,9 @@ const App = () => {
             <SidebarProvider>
               <LayoutProvider>
                 <ChartJsDefaults />
-                <AuthProvider>{content}</AuthProvider>
+                <AuthProvider><MsalProvider instance={msalInstance}>
+                      {content}
+                    </MsalProvider></AuthProvider>
               </LayoutProvider>
             </SidebarProvider>
           </ThemeProvider>

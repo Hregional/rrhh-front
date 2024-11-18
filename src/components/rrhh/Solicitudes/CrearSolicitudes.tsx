@@ -109,9 +109,9 @@ const CreateCollaborator: React.FC = () => {
   });
 
   const optionColaboradores = colaboradores.map(
-    ({ idColaborador, nombres, apellidos }) => ({
+    ({ idColaborador, nombres, primerApellido, segundoApellido }) => ({
         value: idColaborador,
-        label: `${nombres} ${apellidos}`,
+        label: `${nombres} ${primerApellido} ${segundoApellido}`,
     })
 );
   const optionTipoLicencia = tipoLicencia.map(
@@ -147,7 +147,7 @@ const CreateCollaborator: React.FC = () => {
           <Formik
             initialValues={{
               idColaborador: 0,
-              idTipoLicencia: 4,
+              idTipoLicencia: 0,
               idEstadoLicencia: 1,
               fechaInicio: new Date(),
               fechaFin: new Date(),
@@ -252,7 +252,7 @@ const CreateCollaborator: React.FC = () => {
                           }
                           dateFormat="DD/MM/YYYY"
                           timeFormat={false}
-                          className="form-control"
+                          // className="form-control"
                         />
                       </div>
                     </Form.Group>
@@ -268,7 +268,7 @@ const CreateCollaborator: React.FC = () => {
                           }
                           dateFormat="DD/MM/YYYY"
                           timeFormat={false}
-                          className="form-control"
+                          // className="form-control"
                         />
                       </div>
                     </Form.Group>
@@ -321,7 +321,6 @@ const CreateCollaborator: React.FC = () => {
         </Modal.Body>
       </Modal>
       <div>
-        <br />
         <ListarSolicitudes actualizarListado={actualizarListado} />
       </div>
     </div>

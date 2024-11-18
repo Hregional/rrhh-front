@@ -25,6 +25,7 @@ export type JWTContextType = {
   roles: string[];
   method: "jwt";
   signIn: (email: string, password: string) => Promise<void>;
+  singGoogle: (token: string) => Promise<void>;
   signOut: () => Promise<void>;
   signUp: (
     nombreUsuario: string,

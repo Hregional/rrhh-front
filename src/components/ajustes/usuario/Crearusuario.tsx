@@ -42,9 +42,9 @@ function CrearUsuario() {
 
     // Mapeo de opciones para el select
     const optionColaboradores = colaboradores.map(
-        ({ idColaborador, nombres, apellidos, email }) => ({
+        ({ idColaborador, nombres, primerApellido, email }) => ({
             value: idColaborador,
-            label: `${nombres} ${apellidos}`,
+            label: `${nombres} ${primerApellido}`,
             email: email,
         })
     );
@@ -60,7 +60,7 @@ function CrearUsuario() {
         </div>
         <Modal show={showModal} onHide={() => setShowModal(false)} centered>
             <Modal.Header closeButton>
-                <Modal.Title>Crear Usuario</Modal.Title>
+                <Modal.Title>Crear </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 {showAlert && (

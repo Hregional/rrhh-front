@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { Alert, Button, Form, Card, Modal, Row, Col } from "react-bootstrap";
-import useAjustes from "../../hooks/useAjustes";
+import useAjustes from "../../../hooks/useAjustes";
 import ListarDepartamento from "./ListarDepartamentos";
 
 function CrearDepartamento() {
@@ -43,12 +43,12 @@ function CrearDepartamento() {
           )}
           <Formik
             initialValues={{
-              nombreModulo: "",
-              descripcionModulo: "",
+              nombreDepartamento: "",
+              descripcionDepartamento: "",
               submit: false,
             }}
             validationSchema={Yup.object().shape({
-              nombreModulo: Yup.string().required(
+              nombreDepartamento: Yup.string().required(
                 "Campo Nombre Departamento es requerido"
               ),
             })}
@@ -58,12 +58,12 @@ function CrearDepartamento() {
             ) => {
               try {
                 await crearDepartamento(
-                  values.nombreModulo,
-                  values.descripcionModulo
+                  values.nombreDepartamento,
+                  values.descripcionDepartamento
                 );
                 setSuccessMessage("Departamento creado, correctamente!");
-                values.nombreModulo = "";
-                values.descripcionModulo = "";
+                values.nombreDepartamento = "";
+                values.descripcionDepartamento = "";
                 
                 setTimeout(() => {
                   setSuccessMessage(null);
@@ -111,18 +111,18 @@ function CrearDepartamento() {
                   <Form.Control
                     size="lg"
                     type="text"
-                    name="nombreModulo"
+                    name="nombreDepartamento"
                     placeholder="Ingrese Nombre Departamento"
                     onBlur={handleBlur}
                     onChange={handleChange}
-                    value={values.nombreModulo}
+                    value={values.nombreDepartamento}
                     isInvalid={Boolean(
-                      touched.nombreModulo && errors.nombreModulo
+                      touched.nombreDepartamento && errors.nombreDepartamento
                     )}
                   />
-                  {!!touched.nombreModulo && (
+                  {!!touched.nombreDepartamento && (
                     <Form.Control.Feedback type="invalid">
-                      {errors.nombreModulo}
+                      {errors.nombreDepartamento}
                     </Form.Control.Feedback>
                   )}
                 </Form.Group>
@@ -134,18 +134,18 @@ function CrearDepartamento() {
                   <Form.Control
                     size="lg"
                     as="textarea"
-                    name="descripcionModulo"
+                    name="descripcionDepartamento"
                     placeholder="Descripcion del departamento"
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    value={values.descripcionModulo}
+                    value={values.descripcionDepartamento}
                     isInvalid={Boolean(
-                      touched.descripcionModulo && errors.descripcionModulo
+                      touched.descripcionDepartamento && errors.descripcionDepartamento
                     )}
                   />
-                  {!!touched.descripcionModulo && (
+                  {!!touched.descripcionDepartamento && (
                     <Form.Control.Feedback type="invalid">
-                      {errors.descripcionModulo}
+                      {errors.descripcionDepartamento}
                     </Form.Control.Feedback>
                   )}
                 </Form.Group>

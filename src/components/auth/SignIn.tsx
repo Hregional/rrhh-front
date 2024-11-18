@@ -3,17 +3,51 @@ import { Link } from "react-router-dom";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { Alert, Button, Form } from "react-bootstrap";
-
+import { useMsal } from "@azure/msal-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebookF, faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { faMicrosoft } from '@fortawesome/free-brands-svg-icons'; // Asegúrate de importar el icono de Microsoft
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+
 
 import useAuth from "../../hooks/useAuth";
+import { decodeJwt } from "../../utils/jwt";
 
 function SignIn() {
-  const { signIn } = useAuth();
   const [error, setError] = useState<string | null>(null);
+  const { signIn, singGoogle } = useAuth();
+  const  credencialResponse = async (response: any) => {
+    if (response.credential) {
+      await singGoogle(response.credential);
+      window.location.href = "/private/";
+      const tokenDecode = decodeJwt(response.credential);
+    }
+  }
+  const { instance } = useMsal();
 
+  const handleMicrosoftLogin = () => {
+    instance.loginPopup({
+      scopes: ["User.Read"],
+    }).then(response => {
+      console.log("Microsoft login successful:", response);
+      instance.acquireTokenSilent({
+        scopes: ["User.Read"],
+        account: response.account,
+      }).then(tokenResponse => {
+        fetch("https://graph.microsoft.com/v1.0/me", {
+          headers: {
+            Authorization: `Bearer ${tokenResponse.accessToken}`,
+          },
+        })
+        .then(res => res.json())
+        .then(user => {
+          console.log("Correo electrónico del usuario:", user.mail || user.userPrincipalName);
+        });
+      });
+    }).catch(error => {
+      console.log("Microsoft login failed:", error);
+    });
+  };
   return (
     <Formik
       initialValues={{
@@ -136,12 +170,21 @@ function SignIn() {
             </div>
           </div>
           <div className="d-grid gap-2 mb-3">
-            <Link to="/dashboard/default" className="btn btn-google btn-lg">
-              <FontAwesomeIcon icon={faGoogle} /> Iniciar con Google
-            </Link>
-            <Link to="/dashboard/default" className="btn btn-microsoft btn-lg">
+            <div>
+              <GoogleOAuthProvider clientId="209884036937-v0fghoir8ek5892elfve6fu01h6ja0sm.apps.googleusercontent.com">
+                <div>
+                <GoogleLogin
+                  onSuccess={credencialResponse}
+                  onError={() => {
+                    console.log('Iniciar sesión falló');
+                  }}
+                />
+              </div>
+              </GoogleOAuthProvider>
+            </div>
+            <button onClick={handleMicrosoftLogin} className="btn btn-microsoft btn-lg">
               <FontAwesomeIcon icon={faMicrosoft} /> Iniciar con Microsoft
-            </Link>
+            </button>
           </div>
         </>
       )}

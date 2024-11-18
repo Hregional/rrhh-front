@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Table, Pagination, Form } from "react-bootstrap";
 import { Edit2 } from "react-feather";
 import UpdateDepartamento from "./UpdateDepartamento";
-import useAjustes from "../../../src/hooks/useAjustes";
+import useAjustes from "../../../hooks/useAjustes";
 
 interface Props {
     actualizarListado: boolean;
@@ -10,7 +10,7 @@ interface Props {
 
 const ListarDepartamento: React.FC<Props> = ({ actualizarListado }) => {
     const [showModal, setShowModal] = useState(false);
-    const [idModulos, setIdModulos] = useState<number | null>(null);
+    const [idDepartamentos, setIdDepartamentos] = useState<number | null>(null);
     const [nombreDepartamento, setNombreDepartamento] = useState<string>("");
     const [descripcionDepartamento, setdescripcionDepartamento] = useState<string>("");
     const [departamentos, setDepartamentos] = useState<any[]>([]);
@@ -18,8 +18,8 @@ const ListarDepartamento: React.FC<Props> = ({ actualizarListado }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [tasksPerPage, setTasksPerPage] = useState(10);
     const [filters, setFilters] = useState<{ [key: string]: string }>({
-    nombreModulo: "",
-    descripcionModulo: "",
+    nombreDepartamento: "",
+    descripcionDepartamento: "",
     });
 
     const { listarDepartamento } = useAjustes();
@@ -42,11 +42,11 @@ const ListarDepartamento: React.FC<Props> = ({ actualizarListado }) => {
     await obtenerDepas();
     };
 
-    const handleEdit = (idModulos: number,nombreModulo: string, descripcionModulo: string) => {
+    const handleEdit = (idDepartamentos: number,nombreDepartamento: string, descripcionDepartamento: string) => {
     setShowModal(true);
-    setIdModulos(idModulos);
-    setNombreDepartamento(nombreModulo);
-    setdescripcionDepartamento(descripcionModulo);
+    setIdDepartamentos(idDepartamentos);
+    setNombreDepartamento(nombreDepartamento);
+    setdescripcionDepartamento(descripcionDepartamento);
     };
 
     const filteredTasks = departamentos.filter((item) =>
@@ -84,9 +84,9 @@ const ListarDepartamento: React.FC<Props> = ({ actualizarListado }) => {
                 <Form.Control
                     type="text"
                     placeholder="Filtrar por nombre"
-                    value={filters.nombreModulo}
+                    value={filters.nombreDepartamento}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    handleFilterChange("nombreModulo", e.target.value)
+                    handleFilterChange("nombreDepartamento", e.target.value)
                     }
                 />
                 </th>
@@ -95,9 +95,9 @@ const ListarDepartamento: React.FC<Props> = ({ actualizarListado }) => {
                 <Form.Control
                     type="text"
                     placeholder="Filtrar por descripción"
-                    value={filters.descripcionModulo}
+                    value={filters.descripcionDepartamento}
                     onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    handleFilterChange("descripcionModulo", e.target.value)
+                    handleFilterChange("descripcionDepartamento", e.target.value)
                     }
                 />
                 </th>
@@ -108,17 +108,17 @@ const ListarDepartamento: React.FC<Props> = ({ actualizarListado }) => {
             {currentTasks.map((depa, index) => (
                 <tr key={index}>
                 <td>{index}</td>
-                <td>{depa.nombreModulo}</td>
-                <td>{depa.descripcionModulo}</td>
+                <td>{depa.nombreDepartamento}</td>
+                <td>{depa.descripcionDepartamento}</td>
                 <td className="table-action">
                     <Edit2
                     className="align-middle me-1"
                     size={18}
                     onClick={() =>
                         handleEdit(
-                        depa.idModulos,
-                        depa.nombreModulo,
-                        depa.descripcionModulo
+                        depa.idDepartamento,
+                        depa.nombreDepartamento,
+                        depa.descripcionDepartamento
                         )
                     }
                     />
@@ -137,12 +137,12 @@ const ListarDepartamento: React.FC<Props> = ({ actualizarListado }) => {
             <Pagination.Last onClick={goToLastPage} />
             </Pagination>
         </div>
-        {showModal && idModulos !== null && (
+        {showModal && idDepartamentos !== null && (
         <UpdateDepartamento
             setShowModal={setShowModal}
-            idModulos={idModulos}
-            nombreModulo={nombreDepartamento}
-            descripcionModulo={descripcionDepartamento}
+            idDepartamentos={idDepartamentos}
+            nombreDepartamento={nombreDepartamento}
+            descripcionDepartamento={descripcionDepartamento}
             updateList={handleUpdateList}
         />
         )}

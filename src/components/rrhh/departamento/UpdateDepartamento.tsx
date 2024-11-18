@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Card, Alert } from "react-bootstrap";
 import { Formik } from "formik";
-import useAjuste from "../../hooks/useAjustes";
+import useAjuste from "../../../hooks/useAjustes";
 
 interface UpdateTaskProps {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-    idModulos: number;
-    nombreModulo: string;
-    descripcionModulo: string;
+    idDepartamentos: number;
+    nombreDepartamento: string;
+    descripcionDepartamento: string;
     updateList: () => void;
     }
 
 const UpdateDepartamento: React.FC<UpdateTaskProps> = ({
     setShowModal,
-    idModulos,
-    nombreModulo,
-    descripcionModulo,
+    idDepartamentos,
+    nombreDepartamento,
+    descripcionDepartamento,
     updateList,
     }) => {
-    const [nuevoNombreModulo, setNuevoNombreModulo] = useState(nombreModulo);
-    const [nuevaDescripcionModulo, setNuevaDescripcionModulo] = useState(descripcionModulo);
+    const [nuevoNombreDepartamento, setNuevoNombreDepartamento] = useState(nombreDepartamento);
+    const [nuevaDescripcionDepartamento, setNuevaDescripcionDepartamento] = useState(descripcionDepartamento);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
     const [showErrorMessage, setShowErrorMessage] = useState(false);
     const { updateDepartamento } = useAjuste();
@@ -36,19 +36,19 @@ const UpdateDepartamento: React.FC<UpdateTaskProps> = ({
     }, [showSuccessMessage, showErrorMessage]);
 
     const handleChangeNombre = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNuevoNombreModulo(event.target.value);
+        setNuevoNombreDepartamento(event.target.value);
     };
 
     const handleChangeDescripcion = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
-        setNuevaDescripcionModulo(event.target.value);
+        setNuevaDescripcionDepartamento(event.target.value);
     };
 
     const handleSaveChanges = async () => {
         try {
-        const descripcion = nuevaDescripcionModulo != null ? nuevaDescripcionModulo : "";
-        await updateDepartamento(idModulos, nuevoNombreModulo, descripcion);
+        const descripcion = nuevaDescripcionDepartamento != null ? nuevaDescripcionDepartamento : "";
+        await updateDepartamento(idDepartamentos, nuevoNombreDepartamento, descripcion);
         setShowSuccessMessage(true);
         updateList();
         } catch (error) {
@@ -82,7 +82,7 @@ const UpdateDepartamento: React.FC<UpdateTaskProps> = ({
                     type="text"
                     name="nombreDepartamento"
                     placeholder="Ingrese"
-                    value={nuevoNombreModulo}
+                    value={nuevoNombreDepartamento}
                     onChange={handleChangeNombre}
                 />
                 </Form.Group>
@@ -96,7 +96,7 @@ const UpdateDepartamento: React.FC<UpdateTaskProps> = ({
                     type="text"
                     name="descripcionDepartamento"
                     placeholder="Ingrese"
-                    value={nuevaDescripcionModulo}
+                    value={nuevaDescripcionDepartamento}
                     onChange={handleChangeDescripcion}
                 />
                 </Form.Group>

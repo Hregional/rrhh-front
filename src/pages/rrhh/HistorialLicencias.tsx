@@ -1,24 +1,22 @@
 import React from "react";
-import AuthGuard from "../../components/guards/AuthGuard";
-import CrearSolicitudes from "../../components/rrhh/Solicitudes/CrearSolicitudes";
+import AuthGuard from "../../components/guards/AuthGuard"
 import { Helmet } from "react-helmet-async";
 import { Card } from "react-bootstrap";
-
-const Solicitudes = () => {
+import HistorialLicencia from "../../components/rrhh/report/historialLicencia";
+const HistorialLicencias = () => {
     return (
-        <AuthGuard requiredRoles={["CrearSolicitudes"]}>
+        <AuthGuard requiredRoles={["HistorialLicencias"]}>
             <React.Fragment>
-                <Helmet title="Crear Solicitudes" />
+                <Helmet title="Historial de Departamentos" />
                 <Card>
                     <Card.Body>
                         <div className="m-sm-3">
-                            <CrearSolicitudes />
+                            <HistorialLicencia />
                         </div>
                     </Card.Body>
                 </Card>
             </React.Fragment>
         </AuthGuard>
     );
-};
-
-export default Solicitudes;
+    }
+export default HistorialLicencias;

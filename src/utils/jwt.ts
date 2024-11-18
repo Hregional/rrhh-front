@@ -41,5 +41,8 @@ const setSession = (accessToken: string | null) => {
   }
   return { roles };
 };
+const decodeJwt = (token: string) => {
+  return jwtDecode(token);
+}
 
-export { verify, sign, isValidToken, setSession };
+export { verify, sign, isValidToken, setSession, decodeJwt };
