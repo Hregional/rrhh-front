@@ -7,6 +7,8 @@ export type AjustesType = {
     //Roles 
     crearRol: (nombreRol: string, descripcionRol: string) => Promise<void>;
     asignarRol: (idUsuario: number, idRol: number) => Promise<void>;
+    listarUserRol: () => Promise<any[]>;
+    UpdateUserRol: (idUsuario: number, nuevosRoles: number[]) => Promise<void>;
     listarRoles: () => Promise<any[]>;
     listarRolesSinPermisos: () => Promise<any[]>;
     listarUserSinRoles: () => Promise<any[]>;

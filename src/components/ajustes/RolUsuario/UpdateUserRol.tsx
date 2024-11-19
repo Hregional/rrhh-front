@@ -1,36 +1,36 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Modal, Button, Form, Card, Alert, Accordion } from "react-bootstrap";
 import { Formik } from "formik";
-import useAjustes from "../../../hooks/useAjustes";
 import { Search } from "react-feather";
+import useAjustes from "../../../hooks/useAjustes";
 
-interface UpdateModuloPermisosProps {
+interface UpdateUserRolProps {
     setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
-    idRol: number;
-    listPermisos: any[];
+    idUsuario: number;
+    rolList: any[];
     updateList: () => void;
   }
-const UpdateRolPermiso: React.FC<UpdateModuloPermisosProps> = ({
+const UpdateUserRol: React.FC<UpdateUserRolProps> = ({
     setShowModal,
-    idRol,
-    listPermisos,
+    idUsuario,
+    rolList,
     updateList,
   }) => {
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const {
-    updateRolPermisos,
     listarRoles,
-    listarPermisos,
-    listarRolPermisos,
+    listarUserRol,
+    UpdateUserRol,
   } = useAjustes();
   const [error, setError] = useState<string | null>(null);
 
-  const [nuevoIdRol, setnuevoIdRol] = useState(idRol);
-  const [rol, setRol] = useState<any[]>([]);
-  const [rolPermiso, setRolPermiso] = useState<any[]>([]);
+  const [nuevoidUsuario, setnuevoIdUsuario] = useState(idUsuario);
+  const [rolUsuario, setRolUsuario] = useState<any[]>([]);
+    const [usuario, setUsuario] = useState<any[]>([]);
+
   const [filters, setFilters] = useState<{ [key: string]: string }>({
-    nombrePermiso: "",
+    nombreRol: "",
   });
 
   useEffect(() => {
@@ -42,43 +42,42 @@ const UpdateRolPermiso: React.FC<UpdateModuloPermisosProps> = ({
       }, 2000);
       return () => clearTimeout(timer);
     }
-    obtenerRolPermisos();
+    obtenerUserRol();
   }, [showSuccessMessage, showErrorMessage]);
 
-  const obtenerRolPermisos = async () => {
+  const obtenerUserRol = async () => {
     try {
-      const permisos = await listarPermisos();
-      const permisosConEstado = permisos.map((permiso: any) => ({
-        ...permiso,
-        checked: listPermisos.some(
-          (lp: any) => lp.idPermiso === permiso.idPermiso
+      const roles = await listarRoles();
+      const rolesConUsuario = roles.map((rol: any) => ({
+        ...rol,
+        checked: rolList.some(
+          (lp: any) => lp.idRole === rol.idRole
         ),
       }));
-      setRolPermiso(permisosConEstado);
-
-      const roles = await listarRoles();
-      setRol(roles);
+        setRolUsuario(rolesConUsuario);
+        const usuarios = await listarUserRol();
+        setUsuario(usuarios);
 
     } catch (error) {
-      setError("Error al cargar el rol y permisos.");
+      setError("Error al cargar el usuario y roles.");
     }
   };
 
-  const handleChangePermiso = (idPermiso: number, checked: boolean) => {
-    const nuevosPermisos = rolPermiso.map((permiso) =>
-      permiso.idPermiso === idPermiso ? { ...permiso, checked } : permiso
+  const handleChangeRol = (idRole: number, checked: boolean) => {
+    const nuevosRol = rolUsuario.map((rol) =>
+      rol.idRole === idRole ? { ...rol, checked } : rol
     );
-    setRolPermiso(nuevosPermisos);
+    setRolUsuario(nuevosRol);
   };
 
   const handleSaveChanges = async () => {
     try {
       // Filtrar los permisos marcados
-      const nuevosPermisos = rolPermiso
-        .filter((permiso) => permiso.checked)
-        .map((permiso) => permiso.idPermiso);
-
-      await updateRolPermisos(nuevoIdRol, nuevosPermisos);
+      const nuevosRoles = rolUsuario
+        .filter((rol) => rol.checked)
+        .map((rol) => rol.idRole);
+        console.log(nuevosRoles);
+       await UpdateUserRol(nuevoidUsuario, nuevosRoles);
 
       updateList();
       setShowSuccessMessage(true);
@@ -86,8 +85,7 @@ const UpdateRolPermiso: React.FC<UpdateModuloPermisosProps> = ({
       setShowErrorMessage(true);
     }
   };
-
-  const filteredTasks = rolPermiso.filter((item) =>
+  const filteredTasks = rolUsuario.filter((item) =>
     Object.keys(filters).every((key) =>
       item[key].toLowerCase().includes(filters[key].toLowerCase())
     )
@@ -98,7 +96,6 @@ const UpdateRolPermiso: React.FC<UpdateModuloPermisosProps> = ({
       [key]: value,
     }));
   }, []);
-
     return (
       <div>
       <Modal
@@ -108,31 +105,31 @@ const UpdateRolPermiso: React.FC<UpdateModuloPermisosProps> = ({
         className="modal-lg"
       >
         <Modal.Header closeButton>
-          <Modal.Title>Editar Rol y Permisos</Modal.Title>
+          <Modal.Title>Editar Roles de Usuario</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             {showSuccessMessage && (
               <Alert style={{ padding: "10px" }} variant="success">
-                ¡Permisos actualizados correctamente!
+                ¡Roles actualizados correctamente!
               </Alert>
             )}
             {showErrorMessage && (
               <Alert style={{ padding: "10px" }} variant="danger">
-                Error al actualizar los permisos.
+                Error al actualizar los roles.
               </Alert>
             )}
             <Form.Group className="mb-3">
-              <span style={{fontWeight: "bold"}}>Nombre Rol</span>
+              <span style={{fontWeight: "bold"}}>Nombre Usuario</span>
               <Form.Control
                 size="lg"
                 type="text"
-                name="nombreRol"
+                name="nombreUsuario"
                 placeholder="Ingrese"
                 defaultValue={
-                  rol.find(
-                    (rol) => rol.idRole === nuevoIdRol
-                  )?.nombreRol
+                  usuario.find(
+                    (usuario) => usuario.idUsuario === nuevoidUsuario
+                  )?.nombreUsuario
                 }
                 disabled
               />
@@ -144,30 +141,30 @@ const UpdateRolPermiso: React.FC<UpdateModuloPermisosProps> = ({
                 <Form.Control
                   type="text"
                   placeholder="Filtrar por nombre"
-                  value={filters.nombrePermiso}
+                  value={filters.nombreRol}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    handleFilterChange("nombrePermiso", e.target.value)
+                    handleFilterChange("nombreRol", e.target.value)
                   }
                 />
               </div>
               <br />
-              <span style={{fontWeight: "bold"}}>Permisos: <br/><br/></span>
+              <span style={{fontWeight: "bold"}}>Roles: <br/><br/></span>
               
               {filteredTasks && filteredTasks.length > 0 && (
                 <Form.Group className="mb-2 row">
-                  {filteredTasks.map((permiso, index) => (
+                  {filteredTasks.map((rol, index) => (
                     <div key={index} className="col-sm-6 col-md-2 col-lg-3">
                       <Form.Check
                         inline
-                        label={permiso.nombrePermiso}
+                        label={rol.nombreRol}
                         type="checkbox"
-                        name={`permisoEditar2_${index}`}
-                        id={`permisoEditar2_${index}`}
-                        value={permiso.idPermiso}
-                        checked={permiso.checked}
+                        name={`rolEditar2_${index}`}
+                        id={`rolEditar2_${index}`}
+                        value={rol.idRole}
+                        checked={rol.checked}
                         onChange={(e) =>
-                          handleChangePermiso(
-                            permiso.idPermiso,
+                          handleChangeRol(
+                            rol.idRole,
                             e.target.checked
                           )
                         }
@@ -191,4 +188,4 @@ const UpdateRolPermiso: React.FC<UpdateModuloPermisosProps> = ({
     </div>
     )
   }
-export default UpdateRolPermiso;
+export default UpdateUserRol;

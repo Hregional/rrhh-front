@@ -33,7 +33,6 @@ function AsignarRolUsuario() {
       setUser(users);
       const listroles = await listarRoles();
       setroles(listroles);
-      console.log(listroles);
     };
   
     const handleError = (errorMessage: string) => {
@@ -194,9 +193,9 @@ function AsignarRolUsuario() {
             </Form>
           )}
         </Formik>
-        {/* <div className="m-sm-3">
+        <div className="m-sm-3">
           <ListUserRol actualizarListado={actualizarListado} />
-        </div> */}
+        </div>
       </div>
     );
   }
