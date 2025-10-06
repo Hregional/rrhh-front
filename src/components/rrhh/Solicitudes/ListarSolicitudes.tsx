@@ -657,7 +657,7 @@ const getBase64ImageFromUrl = async (url: string): Promise<string> => {
 
         // Firmas y cargos
         worksheet.mergeCells("A22:C22");
-        worksheet.getCell("A22").value = "SANDRA ETELBINA RAMIREZ";
+        worksheet.getCell("A22").value = "NOMBRE DEL COLABORADOR";
         worksheet.getCell("A22").alignment = { horizontal: "center" };
         worksheet.getCell("A22").border = {
             top: { style: 'thin' },
@@ -838,7 +838,7 @@ const getBase64ImageFromUrl = async (url: string): Promise<string> => {
 
         // Firmas y cargos
         worksheet.mergeCells("A22:C22");
-        worksheet.getCell("A22").value = "SANDRA ETELBINA RAMIREZ";
+        worksheet.getCell("A22").value = "NOMBRE DEL COLABORADOR";
         worksheet.getCell("A22").alignment = { horizontal: "center" };
         worksheet.getCell("A22").border = {
             top: { style: 'thin' },
