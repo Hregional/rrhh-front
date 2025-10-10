@@ -69,15 +69,17 @@ const UpdateSolicitud: React.FC<UpdateTaskProps> = ({
     obtenerDatos();
   }, [obtenerDatos]);
 
-  const handleSuccess = (message: any) => {
+  const handleSuccess = (message: string) => {
     setSuccessMessage(message);
     setTimeout(() => {
       setSuccessMessage(null);
-    }, 3000);
+      setShowModal(false);
+    }, 2000);
   };
 
   const handleErrors = (error: any) => {
-    setError(error.response?.data?.error || "Error desconocido.");
+    const errorMessage = error.response?.data?.error || "Error desconocido.";
+    setError(errorMessage);
     setTimeout(() => {
       setError(null);
     }, 3000);
@@ -104,7 +106,6 @@ const UpdateSolicitud: React.FC<UpdateTaskProps> = ({
     })
   );
 
-  const handleOpenModal = useCallback(() => setShowModal(true), []);
   const handleCloseModal = useCallback(() => setShowModal(false), []);
 
   const validationSchema = Yup.object().shape({
@@ -141,8 +142,11 @@ const UpdateSolicitud: React.FC<UpdateTaskProps> = ({
   const handleSaveChanges = async (values: any) => {
     try {
       if (archivo) {
-        await subirConstanciaLicencia(values.idLicencia, archivo);
-        handleSuccess({ data: { message: "Constancia subida y estado actualizado a Aprobado." } });
+        const response = await subirConstanciaLicencia(values.idLicencia, archivo);
+        if (response && response.isAxiosError) {
+            throw response;
+        }
+        handleSuccess("Constancia subida exitosamente.");
       } else {
         const response = await updateLicencia(
           values.idLicencia,
@@ -153,6 +157,9 @@ const UpdateSolicitud: React.FC<UpdateTaskProps> = ({
           new Date(values.fechaFin),
           values.observaciones
         );
+        if (response && response.isAxiosError) {
+            throw response;
+        }
         handleSuccess(response.data.message);
       }
       updateList();
@@ -163,7 +170,7 @@ const UpdateSolicitud: React.FC<UpdateTaskProps> = ({
 
   return (
     <div>
-      <Modal show={true} onHide={() => setShowModal(false)} centered>
+      <Modal show={true} onHide={handleCloseModal} centered>
         <Modal.Header closeButton>
           <Modal.Title>Editar Licencia</Modal.Title>
         </Modal.Header>
@@ -192,10 +199,6 @@ const UpdateSolicitud: React.FC<UpdateTaskProps> = ({
               try {
                 await handleSaveChanges(values);
                 setSubmitting(false);
-                setTimeout(() => {
-                  setSuccessMessage(null);
-                  handleCloseModal();
-                }, 1000);
               } catch (error: any) {
                 handleErrors(error);
                 setSubmitting(false);
@@ -369,7 +372,7 @@ const UpdateSolicitud: React.FC<UpdateTaskProps> = ({
                   <Col xs="auto">
                     <Button
                       variant="success"
-                      onClick={() => handleSubmit()} // Usar handleSubmit de Formik
+                      onClick={handleSubmit} // Usar handleSubmit de Formik
                       disabled={!archivo || isSubmitting}
                     >
                       Subir Constancia
@@ -378,7 +381,7 @@ const UpdateSolicitud: React.FC<UpdateTaskProps> = ({
                   <Col xs="auto">
                     <Button
                       variant="secondary"
-                      onClick={() => setShowModal(false)}
+                      onClick={handleCloseModal}
                     >
                       Cancelar
                     </Button>
