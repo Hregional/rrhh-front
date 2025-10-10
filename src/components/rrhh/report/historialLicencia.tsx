@@ -7,16 +7,20 @@ import {
   Button,
   ToastContainer,
   Toast,
+  Modal,
 } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { Search, Download } from "react-feather";
+import { Search, Download, Eye } from "react-feather";
 import ExcelJS from "exceljs";
 import SelectWithVirtualization from "../../SelectWithVirtualization";
 import useRrhh from "../../../hooks/useRrhh";
 import DT from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import { set } from "react-datepicker/dist/date_utils";
+import axios from "axios";
+import { apiURL } from "../../../utils/endpoints";
+
 interface Values {
     idColaborador: number;
   }
@@ -32,8 +36,17 @@ const HistorialLicencia: React.FC = () => {
   const [ colaborador, setColaborador] = useState<any[]>([]);
   const [fechaInicio, setFechaInicio] = useState<Date | null>(null);
   const [fechaFin, setFechaFin] = useState<Date | null>(null);
-    const { listCollaborator,listarHistorialLicenciaColaborador, listarHistorialLicencia } = useRrhh();
+  const [showModal, setShowModal] = useState(false);
+  const [modalContentUrl, setModalContentUrl] = useState<string | null>(null);
+  const { listCollaborator,listarHistorialLicenciaColaborador, listarHistorialLicencia } = useRrhh();
 
+  const handleCloseModal = () => {
+    if (modalContentUrl && modalContentUrl.startsWith("blob:")) {
+        URL.revokeObjectURL(modalContentUrl);
+    }
+    setShowModal(false);
+    setModalContentUrl(null);
+  };
 
   const obtenerColaboradores = useCallback(async () => {
     try {
@@ -91,6 +104,47 @@ const setIdColaborador = (field: keyof Values, value: number) => {
       return () => clearTimeout(timer); // Limpiar el temporizador si el componente se desmonta
     }
   }, [message, error]);
+
+  const handleVerConstancia = async (idLicencia: number) => {
+    try {
+        const response = await axios.get(`${apiURL}/licencias/obtener-url-constancia/${idLicencia}`);
+        const url = response.data.url;
+        if (url) {
+            if (url.toLowerCase().endsWith('.pdf')) {
+                const fileResponse = await axios.get(url, { responseType: 'blob' });
+                const blob = new Blob([fileResponse.data], { type: 'application/pdf' });
+                const objectUrl = URL.createObjectURL(blob);
+                setModalContentUrl(objectUrl);
+            } else {
+                setModalContentUrl(url);
+            }
+            setShowModal(true);
+        } else {
+            setError("No se pudo obtener la URL de la constancia.");
+        }
+    } catch (error) {
+        setError("Error al obtener la constancia.");
+    }
+  };
+
+  const handleDescargarConstancia = async (idLicencia: number) => {
+    try {
+        const response = await axios.get(`${apiURL}/licencias/obtener-url-constancia/${idLicencia}`);
+        const url = response.data.url;
+        if (url) {
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', ''); // This will force download
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+        } else {
+            setError("No se pudo obtener la URL de la constancia.");
+        }
+    } catch (error) {
+        setError("Error al obtener la constancia.");
+    }
+  };
 
   const exportToExcel = async () => {
     const workbook = new ExcelJS.Workbook();
@@ -234,28 +288,53 @@ const setIdColaborador = (field: keyof Values, value: number) => {
           <th>Tipo</th>
           <th>Estado</th>
           <th>Observaciones</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
         {data.length > 0 ? (
           data.map((historial, index) => (
-            <MemoizedTableRow key={index} historial={historial} />
+            <MemoizedTableRow key={index} historial={historial} onVerConstancia={handleVerConstancia} onDescargarConstancia={handleDescargarConstancia} />
           ))
         ) : (
           <tr>
-            <td colSpan={7} className="text-center">
+            <td colSpan={8} className="text-center">
               No hay datos disponibles
             </td>
           </tr>
         )}
       </tbody>
     </Table>
+
+    <Modal show={showModal} onHide={handleCloseModal} size="lg">
+        <Modal.Header closeButton>
+          <Modal.Title>Visor de Constancia</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {modalContentUrl &&
+            (
+              (modalContentUrl.startsWith("blob:") || modalContentUrl.toLowerCase().endsWith(".pdf")) ? (
+                <object data={modalContentUrl} type="application/pdf" width="100%" height="500px">
+                  <p>This browser does not support PDFs. Please download the PDF to view it: <a href={modalContentUrl}>Download PDF</a>.</p>
+                </object>
+              ) : (
+                <img
+                  src={modalContentUrl}
+                  alt="Constancia"
+                  style={{ width: "100%" }}
+                />
+              )
+            )
+          }
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };
 
 interface TableRowProps {
   historial: {
+    idLicencia: number;
     nombreCompleto: string;
     departamento: string;
     fechaInicio: string;
@@ -264,9 +343,11 @@ interface TableRowProps {
     estadoLicencia: string;
     observaciones: string;
   };
+  onVerConstancia: (idLicencia: number) => void;
+  onDescargarConstancia: (idLicencia: number) => void;
 }
 
-const TableRow: React.FC<TableRowProps> = ({ historial }) => {
+const TableRow: React.FC<TableRowProps> = ({ historial, onVerConstancia, onDescargarConstancia }) => {
   return (
     <tr>
       <td>{historial.nombreCompleto}</td>
@@ -276,6 +357,14 @@ const TableRow: React.FC<TableRowProps> = ({ historial }) => {
       <td>{historial.tipoLicencia}</td>
       <td>{historial.estadoLicencia}</td>
       <td>{historial.observaciones}</td>
+      <td>
+        <Button variant="info" size="sm" onClick={() => onVerConstancia(historial.idLicencia)}>
+          <Eye size={18} />
+        </Button>
+        <Button variant="success" size="sm" className="ml-2" onClick={() => onDescargarConstancia(historial.idLicencia)}>
+          <Download size={18} />
+        </Button>
+      </td>
     </tr>
   );
 };

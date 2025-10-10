@@ -296,6 +296,23 @@ const listarHistorialLicenciaColaborador = async (idColaborador: number | null, 
             `Error en la solicitud listar Historial Licencia: ${error}`
         );
     }
+};
+const subirConstanciaLicencia = async (idLicencia: number, archivo: File) => {
+    try {
+        const formData = new FormData();
+        formData.append("archivo", archivo);
+        const response = await axios.put(`${apiURL}/licencias/subir-constancia/${idLicencia}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return response;
+    } catch (error: any) {
+        console.error(
+            `Error en la solicitud subir constancia: ${error.message}`
+        );
+        return error;
+    }
 }
 
 return (
@@ -317,6 +334,7 @@ return (
         listarHistorialDepartamentoColaborador,
         listarHistorialLicencia,
         listarHistorialLicenciaColaborador,
+        subirConstanciaLicencia,
         }}>
     {children}
 </RrhhContext.Provider>

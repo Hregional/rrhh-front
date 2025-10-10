@@ -38,11 +38,14 @@ const UpdateSolicitud: React.FC<UpdateTaskProps> = ({
 }) => {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [archivo, setArchivo] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
   const {
     listCollaborator,
     listarTipoLicencia,
     listarEstadoLicencia,
     updateLicencia,
+    subirConstanciaLicencia,
   } = useRrhh();
   const [showAlert, setShowAlert] = useState<boolean>(false);
   const [colaborador, setColaborador] = useState<any[]>([]);
@@ -112,20 +115,46 @@ const UpdateSolicitud: React.FC<UpdateTaskProps> = ({
     fechaFin: Yup.date().required("Campo fecha de fin es requerido"),
   });
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.currentTarget.files?.[0];
+    if (file) {
+      if (file.size > 10 * 1024 * 1024) { // 10MB
+        handleErrors({ response: { data: { error: "El archivo no debe exceder los 10MB." } } });
+        return;
+      }
+      if (!["application/pdf", "image/jpeg", "image/png"].includes(file.type)) {
+        handleErrors({ response: { data: { error: "Solo se permiten archivos PDF, JPG o PNG." } } });
+        return;
+      }
+      setArchivo(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setArchivo(null);
+      setPreview(null);
+    }
+  };
+
   const handleSaveChanges = async (values: any) => {
     try {
-      console.log(values);
-      const response = await updateLicencia(
-        values.idLicencia,
-        values.idColaborador,
-        values.idTipoLicencia,
-        values.idEstadoLicencia,
-        new Date(values.fechaInicio),
-        new Date(values.fechaFin),
-        values.observaciones
-      );
-      handleSuccess(response.data.message);
-      setSuccessMessage(response.data.message);
+      if (archivo) {
+        await subirConstanciaLicencia(values.idLicencia, archivo);
+        handleSuccess({ data: { message: "Constancia subida y estado actualizado a Aprobado." } });
+      } else {
+        const response = await updateLicencia(
+          values.idLicencia,
+          values.idColaborador,
+          values.idTipoLicencia,
+          values.idEstadoLicencia,
+          new Date(values.fechaInicio),
+          new Date(values.fechaFin),
+          values.observaciones
+        );
+        handleSuccess(response.data.message);
+      }
       updateList();
     } catch (error: any) {
       handleErrors(error);
@@ -309,14 +338,41 @@ const UpdateSolicitud: React.FC<UpdateTaskProps> = ({
                     </Form.Group>
                   </Col>
                 </Row>
+                <Row>
+                  <Col md="12">
+                    <Form.Group className="mb-3">
+                      <Form.Label>Subir Constancia (PDF, JPG, PNG - max 10MB)</Form.Label>
+                      <Form.Control type="file" onChange={handleFileChange} accept=".pdf,.jpg,.jpeg,.png" />
+                    </Form.Group>
+                  </Col>
+                  {preview && (
+                    <Col md="12" className="text-center mb-3">
+                      <h5>Vista Previa:</h5>
+                      {archivo?.type.startsWith("image/") ? (
+                        <img src={preview} alt="Vista previa" style={{ maxWidth: "100%", maxHeight: "200px" }} />
+                      ) : (
+                        <p>{archivo?.name}</p>
+                      )}
+                    </Col>
+                  )}
+                </Row>
                 <Row className="justify-content-center">
                   <Col xs="auto">
                     <Button
                       variant="primary"
                       type="submit"
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || !!archivo} // Deshabilitar si se sube un archivo
                     >
-                      Guardar
+                      Guardar Cambios
+                    </Button>
+                  </Col>
+                  <Col xs="auto">
+                    <Button
+                      variant="success"
+                      onClick={() => handleSubmit()} // Usar handleSubmit de Formik
+                      disabled={!archivo || isSubmitting}
+                    >
+                      Subir Constancia
                     </Button>
                   </Col>
                   <Col xs="auto">

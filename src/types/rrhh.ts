@@ -69,6 +69,7 @@ export type RrhhType = {
     listarEstadoLicencia: () => Promise<any>;
     crearLicencia: ( idColaborador: number, idTipoLicencia: number, idEstadoLicencia: number, fechaInicio: Date, fechaFin: Date, observaciones: string) => Promise<any>;
     updateLicencia: ( idLicencia: number, idColaborador: number, idTipoLicencia: number, idEstadoLicencia: number, fechaInicio: Date, fechaFin: Date, observaciones: string) => Promise<any>;
+    subirConstanciaLicencia: (idLicencia: number, archivo: File) => Promise<any>;
     
     //Historial departamentos
     listarHistorialDepartamento: () => Promise<any>;
