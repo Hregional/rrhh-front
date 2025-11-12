@@ -91,8 +91,8 @@ const CreateCollaborator: React.FC = () => {
         values.idColaborador,
         values.idTipoLicencia,
         values.idEstadoLicencia,
-        values.fechaInicio,
-        values.fechaFin,
+        new Date(values.fechaInicio),
+        new Date(values.fechaFin),
         values.observaciones,
       );
       handleSuccess(response.data.message);
@@ -247,8 +247,8 @@ const CreateCollaborator: React.FC = () => {
                       <div>
                         <DateTime
                           value={values.fechaInicio}
-                          onChange={(date: Date | string) =>
-                            setFieldValue("fechaInicio", date)
+                          onChange={(date: any) =>
+                            setFieldValue("fechaInicio", date.format("YYYY-MM-DD"))
                           }
                           dateFormat="DD/MM/YYYY"
                           timeFormat={false}
@@ -263,8 +263,8 @@ const CreateCollaborator: React.FC = () => {
                       <div>
                         <DateTime
                           value={values.fechaFin}
-                          onChange={(date: Date | string) =>
-                            setFieldValue("fechaFin", date)
+                          onChange={(date: any) =>
+                            setFieldValue("fechaFin", date.format("YYYY-MM-DD"))
                           }
                           dateFormat="DD/MM/YYYY"
                           timeFormat={false}

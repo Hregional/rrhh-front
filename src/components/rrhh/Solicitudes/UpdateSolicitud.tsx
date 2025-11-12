@@ -274,8 +274,8 @@ const UpdateSolicitud: React.FC<UpdateTaskProps> = ({
                       <div>
                         <DateTime
                           value={typeof values.fechaInicio === "string" ? format(parseISO(values.fechaInicio), "dd/MM/yyyy") : format(values.fechaInicio, "dd/MM/yyyy")}
-                          onChange={(date: Date | string) =>
-                            setFieldValue("fechaInicio", date)
+                          onChange={(date: any) =>
+                            setFieldValue("fechaInicio", date.format("YYYY-MM-DD"))
                           }
                           dateFormat="DD/MM/YYYY"
                           timeFormat={false}
@@ -289,8 +289,8 @@ const UpdateSolicitud: React.FC<UpdateTaskProps> = ({
                       <div>
                         <DateTime
                           value={typeof values.fechaFin === "string" ? format(parseISO(values.fechaFin), "dd/MM/yyyy") : format(values.fechaFin, "dd/MM/yyyy")}
-                          onChange={(date: Date | string) =>
-                            setFieldValue("fechaFin", date)
+                          onChange={(date: any) =>
+                            setFieldValue("fechaFin", date.format("YYYY-MM-DD"))
                           }
                           dateFormat="DD/MM/YYYY"
                           timeFormat={false}
